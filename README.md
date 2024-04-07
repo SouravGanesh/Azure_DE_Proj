@@ -21,15 +21,6 @@ The pipeline adopts Delta Lake architecture, organizing data into bronze, silver
 - **Azure Data Lake Storage Gen2**: Our chosen storage solution, tailored for large-scale data analytics.
 - **Azure Service Principal**: Manages permissions and access, ensuring secure resource interaction.
 
-## Setup Guide
-
-1. **Resource Initialization**: Set up the Azure Resource Group, Databricks workspace, and storage account.
-2. **Data Layer Configuration**: Arrange your storage into bronze, silver, and gold containers.
-3. **Service Principal Setup**: Configure the Service Principal for secure resource interaction.
-   - Register a new app in Azure Active Directory.
-   - Assign necessary roles, like "Storage Blob Data Contributor".
-4. **Connection Security**: Utilize Azure Key Vault to safeguard your Databricks access token and other secrets.
-
 ## Data Ingestion and Transformation Process
 
 1. **Data Upload**: Import your datasets into the bronze layer.

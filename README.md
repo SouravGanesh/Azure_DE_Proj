@@ -69,7 +69,7 @@ LOCATION '/path/to/your/gold/container/directory';
 ## Additional Resources
 
 - [Deploying Azure Services with Terraform](Terraform/README.md)
-- [Executing Databricks Notebooks](Databricks notebook/README.md)
+- [Executing Databricks Notebooks](Databricks Notebooks/README.md)
 
 ## Conclusion
 

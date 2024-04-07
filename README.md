@@ -28,9 +28,9 @@ The deployment process will create and configure the following resources in Azur
 
 Before deploying any resources with Terraform, authenticate to Azure Cloud:
 
-\```shell
+```shell
 az login
-\```
+```
 
 ### 2. Terraform Project Setup
 

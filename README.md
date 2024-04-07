@@ -6,13 +6,31 @@ Welcome to the Azure Data Processing Pipeline project, an end-to-end data engine
 
 This project encapsulates the creation of an end-to-end data pipeline on Azure, employing Delta Lake—an open-source storage layer that ensures ACID transactions and effective metadata handling. Through this pipeline, we orchestrate data movement from the bronze to gold layers, demonstrating incremental load strategies, external table creation for data analytics, and pipeline orchestration, leveraging tools like PySpark, Azure Data Lake Storage (ADLS), Azure Databricks, and Azure Data Factory.
 
+## Use Case Explanation
+
+In this project, we handle transactional data pertaining to loan transactions and customers from GeekBankPE, a renowned global banking institution. Our focus is on fulfilling two primary requirements:
+
+1. **Marketing**: To maintain updated customer data for targeted communications and offer dissemination.
+2. **Finance**: To analyze daily loan transactions, augmented with customer data, aiming to enhance revenue streams.
+
+To achieve these objectives, the project employs incremental loads and upsert techniques to manage data effectively.
+
 ## Architecture
 
-The pipeline adopts Delta Lake architecture, organizing data into bronze, silver, and gold layers, each serving distinct roles in the data transformation journey:
+We adhere to the Delta Lake architecture, segmenting data into three pivotal layers:
 
-- **Bronze Layer**: Acts as the landing zone for raw data.
-- **Silver Layer**: Intermediate layer where data is cleansed, processed, and transformed.
-- **Gold Layer**: The final layer, hosting aggregated or refined data, primed for analytics.
+- **Bronze Layer**: The repository for raw data.
+- **Silver Layer**: The stage for data transformation.
+- **Gold Layer**: The final layer, hosting enriched and aggregated data ready for analysis.
+
+## Data Dictionary
+
+Understanding the data is crucial. Below is a brief overview of the datasets involved:
+
+- **Customer**: Utilizes UPSERT operations for new or altered records.
+- **Customer Drivers**: Daily generated data from the RiskModeling department, capturing snapshot insights.
+- **Loan Transactions**: Details on daily transactional activities, incrementally loaded for analysis.
+
 
 ## Key Components
 
@@ -24,8 +42,8 @@ The pipeline adopts Delta Lake architecture, organizing data into bronze, silver
 ## Data Ingestion and Transformation Process
 
 1. **Data Upload**: Import your datasets into the bronze layer.
-2. **Data Ingestion**: Employ `ingestion` scripts to move data to Databricks, transforming it for the silver layer.
-3. **Data Transformation**: Scripts transform and transition data to the silver and then gold layers in Delta format.
+2. **Mount Storage Containers**: Use the script located in `set_up/adsl_mount_storage` to mount the Azure Storage Gen2 containers to Databricks.
+3. **Data Ingestion**: Employ `ingestion` scripts to move data to Databricks, transforming it for the silver layer.
 
 ## Data Processing and Analytics
 

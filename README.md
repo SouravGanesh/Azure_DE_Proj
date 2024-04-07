@@ -64,7 +64,7 @@ Customer: This data needs to be treated with an UPSERT technique because it only
 Customer Drivers: This data is generated daily from the RiskModeling area. The data that is sent is an snapshot of the day. This data will be loaded incrementally.
 Loan Transactions: Data correspond to the transactions performed in a specific date. This data will be loaded incrementally.
 
-
+- [Step to run databricks notebook](Databricks notebook/README.md)
 2. **Mount Storage Containers**: Use the script located in `set_up/adsl_mount_storage` to mount the Azure Storage Gen2 containers to Databricks.
 
 ## Data Ingestion and Transformation

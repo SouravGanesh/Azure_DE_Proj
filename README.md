@@ -63,6 +63,7 @@ Once the notebooks have processed the data, the next step is to establish a data
 CREATE EXTERNAL TABLE IF NOT EXISTS your_table_name
 USING DELTA
 LOCATION '/path/to/your/gold/container/directory';
+```
 
 ## Testing and Validation
 

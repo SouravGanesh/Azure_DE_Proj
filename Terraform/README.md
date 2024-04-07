@@ -21,6 +21,27 @@ The deployment process will create and configure the following resources in Azur
 - Azure Key Vault
 - Azure Databricks Workspace
 - Databricks Cluster
+## What the Script Does
+
+1. **Client and Subscription Data**: Retrieves the current Azure and Azure AD (Azure Active Directory) client configurations, along with details about the primary Azure subscription. This information configures resources and associates them with the correct Azure environment and subscription.
+
+2. **Azure Service Principal for Databricks**: Defines a service principal in Azure AD with the display name "AzureDatabricks", used for secure access to Azure resources by automated processes and applications without user credentials.
+
+3. **Resource Group**: Creates a resource group named `rgdata01` to contain all the script-created resources, simplifying management and billing.
+
+4. **Storage Account and Containers**: Provisions an Azure Storage Account (`stacdata01`) within the resource group, specifying three containers for different data layers: bronze, silver, and gold, for data at various stages of processing and transformation.
+
+5. **Databricks Workspace**: Establishes an Azure Databricks workspace (`dbwdata01`), facilitating collaborative data exploration, data engineering, and machine learning, linked to the same resource group and location as other resources.
+
+6. **Key Vault**: Sets up an Azure Key Vault (`kvdatabricks`) to securely store and manage secrets, keys, and certificates, with configured access policies, including one for the Azure Databricks service principal.
+
+7. **Azure AD Application and Service Principal**: Creates an Azure AD application (`databricksapp`) and a related service principal to authenticate and authorize the Databricks application, enabling access to specific Azure resources like the storage account.
+
+8. **Role Assignment**: Assigns the "Storage Blob Data Contributor" role to the service principal for the storage account, allowing data access and modification.
+
+9. **Key Vault Secrets**: Generates Key Vault secrets to store sensitive information, like the application ID and a password for the Databricks application, ensuring secure credential access.
+
+10. **Databricks Cluster**: Sets up a Databricks cluster (`dbcluster01`) in the workspace, configured as a single-node cluster ideal for lightweight workloads and testing, with a link to the storage account through Key Vault-stored secrets for data access.
 
 ## Step-by-Step Deployment Guide
 

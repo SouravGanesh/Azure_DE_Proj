@@ -46,7 +46,7 @@ az login
 Create a new folder named `Terraform` in your preferred location and include the following files:
 
 - `main.tf`: This is typically the primary file in a Terraform module where you define the actual resources that will be created, modified, or destroyed. main.tf contains the resource definitions and possibly data source configurations. It's where the core logic of your infrastructure as code is implemented.
-- `providers.tf`: This file is used to define the providers that Terraform will use to manage resources. Providers are plugins Terraform uses to interact with cloud providers, SaaS providers, and other APIs. In providers.tf, you specify which providers are required for your module, along with any configuration settings that the providers might need, such as region or access credentials. in out project we have used  `azurerm`, `databricks`, `azuread`, and `time`.
+- `providers.tf`: This file is used to define the providers that Terraform will use to manage resources. Providers are plugins Terraform uses to interact with cloud providers, SaaS providers, and other APIs. In providers.tf, you specify which providers are required for your module, along with any configuration settings that the providers might need, such as region or access credentials. in out project we have used  azurerm, databricks, azuread, and time.
 - `variables.tf`: This file declares variables that will be used in the Terraform configuration, allowing for dynamic input that can be different depending on the environment or user input. By using variables, you can customize your configurations without altering the main codebase. variables.tf typically includes declarations and sometimes default values, but the actual values are usually provided at runtime or through tfvars files.
 
 
@@ -55,7 +55,6 @@ Create a new folder named `Terraform` in your preferred location and include the
 Initialize Terraform to prepare your working directory and load the necessary providers:
 
 ```shell
-cd path/to/databricks
 terraform init
 ```
 

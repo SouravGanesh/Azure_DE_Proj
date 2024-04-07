@@ -48,26 +48,26 @@ The Terraform providers `azurerm`, `databricks`, `azuread`, and `time` are utili
 
 Initialize Terraform to prepare your working directory and load the necessary providers:
 
-\```shell
+```shell
 cd path/to/databricks
 terraform init
-\```
+```
 
 ### 5. Terraform Plan
 
 Preview the infrastructure changes with the `terraform plan` command to ensure the configurations are as expected:
 
-\```shell
+```shell
 terraform plan
-\```
+```
 
 ### 6. Terraform Apply
 
 Apply the Terraform configurations to create and configure the Azure resources:
 
-\```shell
+```shell
 terraform apply
-\```
+```
 
 ## Conclusion
 

@@ -6,6 +6,8 @@ Welcome to the Azure Data Processing Pipeline project, an end-to-end data engine
 
 This project encapsulates the creation of an end-to-end data pipeline on Azure, employing Delta Lake—an open-source storage layer that ensures ACID transactions and effective metadata handling. Through this pipeline, we orchestrate data movement from the bronze to gold layers, demonstrating incremental load strategies, external table creation for data analytics, and pipeline orchestration, leveraging tools like PySpark, Azure Data Lake Storage (ADLS), Azure Databricks, and Azure Data Factory.
 
+![Main Diagram](Architecture/main-architecture.PNG "Main Diagram")
+
 ## Use Case Explanation
 
 In this project, we handle transactional data pertaining to loan transactions and customers from GeekBankPE, a renowned global banking institution. Our focus is on fulfilling two primary requirements:

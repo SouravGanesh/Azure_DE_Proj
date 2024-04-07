@@ -1,0 +1,172 @@
+{
+	"name": "a",
+	"properties": {
+		"activities": [
+			{
+				"name": "ingest_customer",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/souravganesh.crp@gmail.com/Azure_DE_Terraform_Proj/ingestion/customer",
+					"baseParameters": {
+						"p_file_date": {
+							"value": "@formatDateTime(pipeline().parameters.p_processing_date, 'yyyy-MM-dd')\n",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "azure_de_proj_ls",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "ingest_customerDriver",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/souravganesh.crp@gmail.com/Azure_DE_Terraform_Proj/ingestion/customerDriver",
+					"baseParameters": {
+						"p_file_date": {
+							"value": "@formatDateTime(pipeline().parameters.p_processing_date, 'yyyy-MM-dd')\n",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "azure_de_proj_ls",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "ingest_loanTransaction",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/souravganesh.crp@gmail.com/Azure_DE_Terraform_Proj/ingestion/loanTransaction",
+					"baseParameters": {
+						"p_file_date": {
+							"value": "@formatDateTime(pipeline().parameters.p_processing_date, 'yyyy-MM-dd')\n",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "azure_de_proj_ls",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "enrichment_customer",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "ingest_customer",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "ingest_customerDriver",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "ingest_loanTransaction",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/souravganesh.crp@gmail.com/Azure_DE_Terraform_Proj/enrichment/customer",
+					"baseParameters": {
+						"p_file_date": {
+							"value": "@formatDateTime(pipeline().parameters.p_processing_date, 'yyyy-MM-dd')\n",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "azure_de_proj_ls",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "enrichment_loanTrx",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "enrichment_customer",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/souravganesh.crp@gmail.com/Azure_DE_Terraform_Proj/enrichment/loanTrx",
+					"baseParameters": {
+						"p_file_date": {
+							"value": "@formatDateTime(pipeline().parameters.p_processing_date, 'yyyy-MM-dd')\n",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "azure_de_proj_ls",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"concurrency": 1,
+		"parameters": {
+			"p_processing_date": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-04-07T05:15:07Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

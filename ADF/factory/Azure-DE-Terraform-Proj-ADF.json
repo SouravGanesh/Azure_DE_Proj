@@ -1,0 +1,9 @@
+{
+	"name": "Azure-DE-Terraform-Proj-ADF",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b185960c-b69c-425d-9b46-31533caeeb78",
+		"tenantId": "08755c65-23f6-4e72-aa0a-071a1941ef7a"
+	}
+}

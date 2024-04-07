@@ -50,9 +50,9 @@ Understanding the data is crucial. Below is a brief overview of the datasets inv
 
 After executing the notebooks within the Databricks folders, the data is refined and stored in the gold container, utilizing the Delta format. Then create a database that interfaces with this gold-layer data, enabling advanced analytics and insights.
 
-### Creating the Database
+### Creating External Table
 
-Once the notebooks have processed the data, the next step is to establish a database that leverages this curated dataset. Follow the instructions below to create your database:
+Note: If you drop your database which is mounted on your gold container, all the files inside that container are going to be deleted too.
 
 ```sql
 -- Execute this SQL command within your Databricks database notebook

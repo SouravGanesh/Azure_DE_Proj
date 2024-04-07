@@ -50,6 +50,20 @@ Understanding the data is crucial. Below is a brief overview of the datasets inv
 - **Data Enrichment**: Scripts in the `enrichment` folder enhance data for specific use cases, storing outcomes in the gold layer.
 - **Database Creation**: Utilize the provided script to mount your database over the gold container, facilitating data analytics.
 
+## Post-Processing Steps
+
+After executing the notebooks within the Databricks folders, the data is refined and stored in the gold container, utilizing the Delta format. Then create a database that interfaces with this gold-layer data, enabling advanced analytics and insights.
+
+### Creating the Database
+
+Once the notebooks have processed the data, the next step is to establish a database that leverages this curated dataset. Follow the instructions below to create your database:
+
+```sql
+-- Execute this SQL command within your Databricks database notebook
+CREATE EXTERNAL TABLE IF NOT EXISTS your_table_name
+USING DELTA
+LOCATION '/path/to/your/gold/container/directory';
+
 ## Testing and Validation
 
 - **Pipeline Verification**: Use the `test_ingestion_pipeline` notebook to ensure the pipeline's functionality.

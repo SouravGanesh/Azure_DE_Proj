@@ -93,6 +93,7 @@ With Azure Data Factory, you can create a pipeline that defines the data-driven 
 - **Activity Duplication**: Right-click to copy your configured activity, altering the name for each new instance.
 - **Notebook Selection**: For each copied activity, select the appropriate notebook from the ingestion and enrichment folders.
 
+![ADF Diagram](Architecture/adf_flow.PNG "Data Factory Flow Diagram")
 ### Step 4: Debugging and Linking
 
 After setting up all activities:

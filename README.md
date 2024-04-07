@@ -23,6 +23,10 @@ We adhere to the Delta Lake architecture, segmenting data into three pivotal lay
 - **Silver Layer**: The stage for data transformation.
 - **Gold Layer**: The final layer, hosting enriched and aggregated data ready for analysis.
 
+![Architecture Diagram](Architecture/data_layer.PNG "Data Flow Diagram")
+
+  
+
 ## Data Dictionary
 
 Understanding the data is crucial. Below is a brief overview of the datasets involved:

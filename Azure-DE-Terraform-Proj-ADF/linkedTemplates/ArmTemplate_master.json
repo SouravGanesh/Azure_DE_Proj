@@ -1,0 +1,70 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "Azure-DE-Terraform-Proj-ADF"
+		},
+		"azure_de_proj_ls_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'azure_de_proj_ls'"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kvterraprojprod.vault.azure.net/"
+		},
+		"azure_de_proj_ls_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0406-051133-51ff4iql"
+		},
+		"azure_de_proj_properties_pipeline_parameters_p_processing_date": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "Azure-DE-Terraform-Proj-ADF_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"azure_de_proj_ls_accessToken": {
+						"value": "[parameters('azure_de_proj_ls_accessToken')]"
+					},
+					"AzureKeyVault1_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+					},
+					"azure_de_proj_ls_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('azure_de_proj_ls_properties_typeProperties_existingClusterId')]"
+					},
+					"azure_de_proj_properties_pipeline_parameters_p_processing_date": {
+						"value": "[parameters('azure_de_proj_properties_pipeline_parameters_p_processing_date')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

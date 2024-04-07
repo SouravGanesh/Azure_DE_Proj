@@ -1,0 +1,276 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "Azure-DE-Terraform-Proj-ADF"
+		},
+		"azure_de_proj_ls_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'azure_de_proj_ls'"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kvterraprojprod.vault.azure.net/"
+		},
+		"azure_de_proj_ls_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0406-051133-51ff4iql"
+		},
+		"azure_de_proj_properties_pipeline_parameters_p_processing_date": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureKeyVault1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/azure_de_proj_ls')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-2262589934690181.1.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('azure_de_proj_ls_accessToken')]"
+					},
+					"existingClusterId": "[parameters('azure_de_proj_ls_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Azure_DE_Proj')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ingest_customer",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/souravganesh.crp@gmail.com/Azure_DE_Terraform_Proj/ingestion/customer",
+							"baseParameters": {
+								"p_file_date": {
+									"value": "@formatDateTime(pipeline().parameters.p_processing_date, 'yyyy-MM-dd')\n",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "azure_de_proj_ls",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ingest_customerDriver",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/souravganesh.crp@gmail.com/Azure_DE_Terraform_Proj/ingestion/customerDriver",
+							"baseParameters": {
+								"p_file_date": {
+									"value": "@formatDateTime(pipeline().parameters.p_processing_date, 'yyyy-MM-dd')\n",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "azure_de_proj_ls",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ingest_loanTransaction",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/souravganesh.crp@gmail.com/Azure_DE_Terraform_Proj/ingestion/loanTransaction",
+							"baseParameters": {
+								"p_file_date": {
+									"value": "@formatDateTime(pipeline().parameters.p_processing_date, 'yyyy-MM-dd')\n",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "azure_de_proj_ls",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "enrichment_customer",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "ingest_customer",
+								"dependencyConditions": [
+									"Completed"
+								]
+							},
+							{
+								"activity": "ingest_customerDriver",
+								"dependencyConditions": [
+									"Completed"
+								]
+							},
+							{
+								"activity": "ingest_loanTransaction",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/souravganesh.crp@gmail.com/Azure_DE_Terraform_Proj/enrichment/customer",
+							"baseParameters": {
+								"p_file_date": {
+									"value": "@formatDateTime(pipeline().parameters.p_processing_date, 'yyyy-MM-dd')\n",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "azure_de_proj_ls",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "enrichment_loanTrx",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "enrichment_customer",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/souravganesh.crp@gmail.com/Azure_DE_Terraform_Proj/enrichment/loanTrx",
+							"baseParameters": {
+								"p_file_date": {
+									"value": "@formatDateTime(pipeline().parameters.p_processing_date, 'yyyy-MM-dd')\n",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "azure_de_proj_ls",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"concurrency": 1,
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_processing_date": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2024-04-07T05:15:07Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/azure_de_proj_ls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/azure_de_proj')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "Azure_DE_Proj",
+						"type": "PipelineReference"
+					},
+					"parameters": {
+						"p_processing_date": "[parameters('azure_de_proj_properties_pipeline_parameters_p_processing_date')]"
+					}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 24,
+					"startTime": "2024-04-07T10:00:00Z",
+					"endTime": "2024-04-11T05:11:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 1,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Azure_DE_Proj')]"
+			]
+		}
+	]
+}

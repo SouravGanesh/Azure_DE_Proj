@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "Azure-DE-Terraform-Proj-ADF"
+		},
+		"azure_de_proj_ls_accessToken": {
+			"value": ""
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://kvterraprojprod.vault.azure.net/"
+		},
+		"azure_de_proj_ls_properties_typeProperties_existingClusterId": {
+			"value": "0406-051133-51ff4iql"
+		},
+		"azure_de_proj_properties_pipeline_parameters_p_processing_date": {
+			"value": "@trigger().outputs.windowEndTime"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

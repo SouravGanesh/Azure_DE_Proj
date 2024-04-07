@@ -44,11 +44,7 @@ Understanding the data is crucial. Below is a brief overview of the datasets inv
 1. **Data Upload**: Import your datasets into the bronze layer.
 2. **Mount Storage Containers**: Use the script located in `set_up/adsl_mount_storage` to mount the Azure Storage Gen2 containers to Databricks.
 3. **Data Ingestion**: Employ `ingestion` scripts to move data to Databricks, transforming it for the silver layer.
-
-## Data Processing and Analytics
-
-- **Data Enrichment**: Scripts in the `enrichment` folder enhance data for specific use cases, storing outcomes in the gold layer.
-- **Database Creation**: Utilize the provided script to mount your database over the gold container, facilitating data analytics.
+4. **Data Enrichment**: Scripts in the `enrichment` folder enhance data for specific use cases, storing outcomes in the gold layer.
 
 ## Post-Processing Steps
 

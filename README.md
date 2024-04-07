@@ -1,96 +1,56 @@
-Overview:
-end to end data engineering project on azure colud plotform. deployed and managed resourses from terraform. develop an end-to-end data pipeline using Delta Lake which is an open-source storage layer that provides ACID transactions and metadata handling. Also we use databrck notebooks to data moves from bronze to gold container, how to make an incremental load, create external tables for data analysis and orchestrate your pipeline. We will use technologies such as PySpark, ADSLS, Azure Databricks, Azure Data Factory 
+# Azure Data Processing Pipeline Project
 
-few things about terraform....
-- [Step to deploy Azure Services through Terraform](Terraform/README.md)
-# Azure Data Processing Pipeline
+Welcome to the Azure Data Processing Pipeline project, an end-to-end data engineering initiative leveraging the power of the Azure cloud platform. This project is crafted to demonstrate the deployment and management of resources using Terraform, alongside developing a comprehensive data pipeline utilizing Delta Lake and Azure Databricks.
 
-Welcome to our Azure Data Processing Pipeline project! This initiative is designed to harness the power of Azure services to build a sophisticated data processing framework. Whether you're a seasoned expert or new to Azure, we'll walk you through the essentials of what we're building and how everything ties together.
+## Overview
 
-## Project Overview
-
-In this project, we've laid the groundwork for a data processing pipeline using several Azure services. Our goal is to create a scalable, secure, and efficient pipeline that transitions data through different stages, ultimately transforming raw data into insightful information.
+This project encapsulates the creation of an end-to-end data pipeline on Azure, employing Delta Lake—an open-source storage layer that ensures ACID transactions and effective metadata handling. Through this pipeline, we orchestrate data movement from the bronze to gold layers, demonstrating incremental load strategies, external table creation for data analytics, and pipeline orchestration, leveraging tools like PySpark, Azure Data Lake Storage (ADLS), Azure Databricks, and Azure Data Factory.
 
 ## Architecture
 
-We're implementing the Delta Lake Architecture, organizing our data into three layers known as bronze, silver, and gold. Each layer serves a specific purpose:
+The pipeline adopts Delta Lake architecture, organizing data into bronze, silver, and gold layers, each serving distinct roles in the data transformation journey:
 
-- **Bronze**: The initial landing zone for raw data.
-- **Silver**: Where data is cleansed, processed, and transformed.
-- **Gold**: The final layer, containing aggregated or refined data, ready for analytics.
+- **Bronze Layer**: Acts as the landing zone for raw data.
+- **Silver Layer**: Intermediate layer where data is cleansed, processed, and transformed.
+- **Gold Layer**: The final layer, hosting aggregated or refined data, primed for analytics.
 
 ## Key Components
 
-- **Azure Resource Group**: The container that holds related resources for our Azure solution.
-- **Databricks Workspace**: Provides a collaborative environment with a single-node cluster for processing data.
-- **Azure Data Lake Storage Gen2**: Acts as our storage solution, optimized for large-scale data analytics.
-- **Azure Service Principal**: A service account that helps manage permissions and access to Azure resources securely.
+- **Azure Resource Group**: Encapsulates related Azure resources.
+- **Databricks Workspace**: Offers a collaborative environment for data processing.
+- **Azure Data Lake Storage Gen2**: Our chosen storage solution, tailored for large-scale data analytics.
+- **Azure Service Principal**: Manages permissions and access, ensuring secure resource interaction.
 
-## Setting Up the Environment
+## Setup Guide
 
-1. **Create Azure Resources**: Begin by setting up the resource group, Databricks workspace, and storage account.
-2. **Initialize Data Layers**: Organize your storage account into three containers corresponding to the bronze, silver, and gold layers.
-3. **Configure Azure Service Principal**: Set up the Service Principal in Azure Active Directory, granting it the necessary permissions to interact with your resources.
+1. **Resource Initialization**: Set up the Azure Resource Group, Databricks workspace, and storage account.
+2. **Data Layer Configuration**: Arrange your storage into bronze, silver, and gold containers.
+3. **Service Principal Setup**: Configure the Service Principal for secure resource interaction.
+   - Register a new app in Azure Active Directory.
+   - Assign necessary roles, like "Storage Blob Data Contributor".
+4. **Connection Security**: Utilize Azure Key Vault to safeguard your Databricks access token and other secrets.
 
-    - Navigate to Azure Active Directory.
-    - Click on App registrations, then New Registration.
-    - Assign the "Storage Blob Data Contributor" role to the Service Principal for your storage account.
+## Data Ingestion and Transformation Process
 
-4. **Secure Your Connections**: Store your Databricks access token and other secrets securely using Azure Key Vault.
+1. **Data Upload**: Import your datasets into the bronze layer.
+2. **Data Ingestion**: Employ `ingestion` scripts to move data to Databricks, transforming it for the silver layer.
+3. **Data Transformation**: Scripts transform and transition data to the silver and then gold layers in Delta format.
 
-Use Case Explanation
-We will be working with transactional data referred to loan transactions and customers from GeekBankPE (a famous bank around the world).
+## Data Processing and Analytics
 
-You have two requirements from different areas of the bank.
+- **Data Enrichment**: Scripts in the `enrichment` folder enhance data for specific use cases, storing outcomes in the gold layer.
+- **Database Creation**: Utilize the provided script to mount your database over the gold container, facilitating data analytics.
 
-The Marketing area needs to have updated customer data to be able to contact them and make offers.
-The Finance area requires to have daily loan transactions complemented with customer drivers to be able to analyze them and improve the revenue.
-To comply with the request, we are going to perform incremental loads and also using techniques like upsert.
+## Testing and Validation
 
-Architecture
-We are going to work following the delta lake architecture.
+- **Pipeline Verification**: Use the `test_ingestion_pipeline` notebook to ensure the pipeline's functionality.
+- **Data Querying**: Post-processing, query database tables to validate data accuracy and integrity.
 
-Bronze: Raw data (Data stored in original format)
-Silver: Transformed data (Data stored in delta format)
-Gold: Feature/Agg data (Data stored in delta format)
+## Additional Resources
 
+- [Deploying Azure Services with Terraform](Terraform/README.md)
+- [Executing Databricks Notebooks](Databricks notebook/README.md)
 
+## Conclusion
 
-
- Data Dictionary
-I will describe the columns of each file so you can have a better understanding of the data.
-
-Customer: This data needs to be treated with an UPSERT technique because it only send new and modified records daily.
-Customer Drivers: This data is generated daily from the RiskModeling area. The data that is sent is an snapshot of the day. This data will be loaded incrementally.
-Loan Transactions: Data correspond to the transactions performed in a specific date. This data will be loaded incrementally.
-
-- [Step to run databricks notebook](Databricks notebook/README.md)
-2. **Mount Storage Containers**: Use the script located in `set_up/adsl_mount_storage` to mount the Azure Storage Gen2 containers to Databricks.
-
-## Data Ingestion and Transformation
-
-1. **Upload Dataset**: Place your initial datasets (csv files) into the bronze layer container in Azure Storage.
-
-2. **Ingest Data**: Utilize the scripts in the `ingestion` folder to ingest data from the bronze container to the Databricks environment. This process includes essential data transformation steps, preparing the data for the silver layer.
-
-3. **Transformation**: The ingestion scripts will transform the data and store it in the silver container in a Delta format.
-
-2. **Enrichment**: Utilize the scripts in the `enrichment` folder to further process and enrich the data based on the defined use cases. The enriched data is derived from the silver container and stored in gold container.
-
-
-
-after the note books in databricks folders are ran we have the we have the final data in gold container in delta formate.
- Creating database
-Copy the below code to the database notebook and execute it. Once execution finish you have mounted your database over the gold container.
-
-Note: If you drop your database which is mounted on your gold container, all the files inside that container are going to be deleted too.
-
-"CREATE EXTERNAL TABLE I in enrichment folder databricks notebook after saving data in gold layer.
-
-## Testing
-
-- **Pipeline Testing**: The `test_ingestion_pipeline` notebook in the `utility` folder is designed to test the data ingestion and transformation pipeline, ensuring that the entire process operates smoothly.
-
-finally test the notebook
-Querying database tables from SQL notebook
-
+By following this project, you'll gain hands-on experience with Azure's data services, understanding how to construct a robust data processing pipeline. Whether you're targeting data analytics, pipeline optimization, or cloud resource management, this project offers a comprehensive learning journey.

@@ -5,7 +5,7 @@
 		"runtimeState": "Started",
 		"pipeline": {
 			"pipelineReference": {
-				"referenceName": "a",
+				"referenceName": "Azure_DE_Proj",
 				"type": "PipelineReference"
 			},
 			"parameters": {

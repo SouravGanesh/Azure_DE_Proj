@@ -74,6 +74,14 @@ Apply the Terraform configurations to create and configure the Azure resources:
 terraform apply
 ```
 
+### 5. Terraform Destroy
+
+terraform destroy is a Terraform command used to tear down or destroy the infrastructure resources created and managed by Terraform.
+
+```shell
+terraform destroy
+```
+
 ## Conclusion
 
 After executing these steps, your Azure Databricks environment will be set up and ready for use. This guide ensures a structured approach to deploying Azure resources, making your infrastructure management more efficient and reproducible.
